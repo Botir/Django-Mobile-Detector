@@ -1,4 +1,5 @@
-from .detection import Detection
+from django.utils.functional import SimpleLazyObject
+from .detection import detect
 
 class DetectMiddleware(object):
 
@@ -11,9 +12,4 @@ class DetectMiddleware(object):
         return self.get_response(request)
 
     def process_request(self, request):
-        detector = Detection(request)
-
-        request.device = dict()
-        request.device['is_mobile'] = detector.is_mobile()
-        request.device['is_tablet'] = detector.is_tablet()
-        request.device['user_agent'] = detector.user_agent.name
+        request.device = detect(request)

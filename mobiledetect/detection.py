@@ -1,4 +1,5 @@
 import re
+from collections import namedtuple
 from .headers import DeviceHeader
 from .user_agent import UserAgnet
 from .constants import MOBILE_HEADERS, TABLET_DEVICES, get_extended_rule, get_mobile_rule
@@ -137,4 +138,11 @@ class Detection(object):
         pass
 
 def detect(request):
-    return Detection(request)
+    detector = Detection(request)
+    result = {
+        'is_mobile': detector.is_mobile(),
+        'is_tablet': detector.is_mobile(),
+        'user_agent': detector.user_agent.name
+    }
+    object_name = namedtuple("ObjectName", result.keys())(*result.values())
+    return object_name
