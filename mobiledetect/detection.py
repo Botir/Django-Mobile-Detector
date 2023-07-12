@@ -126,6 +126,11 @@ class Detection(object):
         This method will be used to check custom regexes against
         the User-Agent string.
         """
+
+        ## if user agents is empty, return false by default
+        if not user_agents:
+            return False
+
         matches = re.findall(re.compile(match), user_agents if user_agents else self.user_agent.name)
         if matches and len(matches) > 0:
             self.matching_regex = match
