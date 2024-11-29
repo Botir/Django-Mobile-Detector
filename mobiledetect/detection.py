@@ -146,7 +146,7 @@ def detect(request):
     detector = Detection(request)
     result = {
         'is_mobile': detector.is_mobile(),
-        'is_tablet': detector.is_mobile(),
+        'is_tablet': detector.is_tablet(),
         'user_agent': detector.user_agent.name
     }
     object_name = namedtuple("ObjectName", result.keys())(*result.values())
