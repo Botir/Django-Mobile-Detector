@@ -43,15 +43,14 @@ class Detection(object):
 
         if self.check_http_headers_for_mobile():
             return True
-        else:
-            return self.match_detection_rules()
+
+        return self.match_detection_rules()
 
     def is_tablet(self, user_agent=None, http_headers=None):
         """
         Check if the device is a tablet.
         Return true if any type of tablet device is detected.
         """
-
 
         # Check specifically for cloudfront headers if the useragent == 'Amazon CloudFront'
         if self.user_agent == 'Amazon CloudFront':
@@ -127,17 +126,18 @@ class Detection(object):
         the User-Agent string.
         """
 
+        _ua = user_agents if user_agents else self.user_agent.name
         ## if user agents is empty, return false by default
-        if not user_agents:
+        if not _ua:
             return False
 
-        matches = re.findall(re.compile(match), user_agents if user_agents else self.user_agent.name)
+        matches = re.findall(re.compile(match), _ua)
         if matches and len(matches) > 0:
             self.matching_regex = match
             self.matches_array = matches
             return True
-        else:
-            return False
+
+        return False
 
     def get_device_type(self):
         pass
@@ -146,7 +146,7 @@ def detect(request):
     detector = Detection(request)
     result = {
         'is_mobile': detector.is_mobile(),
-        'is_tablet': detector.is_mobile(),
+        'is_tablet': detector.is_tablet(),
         'user_agent': detector.user_agent.name
     }
     object_name = namedtuple("ObjectName", result.keys())(*result.values())
